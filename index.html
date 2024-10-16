@@ -1,73 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diet and Precautions Plan</title>
     <style>
+        /* Base styling */
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
             margin: 0;
             padding: 0;
-            background-color: #f0f2f5;
+            background-color: #f4f6f9;
+            color: #333;
         }
+
+        /* Container styling */
         .container {
-            max-width: 600px;
-            width: 100%;
+            max-width: 700px;
+            margin: 60px auto;
             background-color: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin: 50px auto;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
         }
+
+        /* Title and headings */
         h1, h2 {
-            color: #2c3e50;
             text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
         }
-        label {
-            font-size: 1em;
-            color: #34495e;
+
+        h1 {
+            font-size: 2.2rem;
+            position: relative;
+        }
+
+        h1:after {
+            content: '';
             display: block;
-            margin-bottom: 8px;
+            width: 60px;
+            height: 3px;
+            background-color: #3498db;
+            margin: 10px auto;
         }
+
+        /* Input fields and labels */
+        label {
+            font-size: 1.1em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: block;
+        }
+
         input, select {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
             font-size: 1em;
+            transition: border-color 0.3s;
         }
+
+        input:focus, select:focus {
+            border-color: #3498db;
+        }
+
+        /* Buttons */
         button {
             background-color: #3498db;
             color: #fff;
-            padding: 10px 20px;
+            padding: 12px 20px;
             border: none;
             border-radius: 6px;
-            font-size: 1em;
+            font-size: 1.1em;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-bottom: 20px;
+            transition: background-color 0.3s;
             width: 100%;
+            margin-bottom: 20px;
         }
+
         button:hover {
             background-color: #2980b9;
         }
+
+        .btn-link {
+            background-color: #2ecc71;
+            text-align: center;
+        }
+
+        /* Result container */
         #result-container {
             display: none;
         }
-        .btn-link {
-            background-color: #2ecc71;
-            margin-top: 20px;
-            display: inline-block;
+
+        /* Image styling */
+        .banner-img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Additional visuals */
+        .container:before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: 20px;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 10%, transparent 60%);
+            border-radius: 50%;
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .container {
+            animation: slideIn 0.6s ease-out;
         }
     </style>
 </head>
+
 <body>
-    <!-- Input Form Container -->
+    <!-- Main Container -->
     <div class="container" id="form-container">
         <h1>Diet and Precautions Plan Generator</h1>
+
+        <!-- Add a Banner Image -->
+        <img src="https://via.placeholder.com/700x300" alt="Health Banner" class="banner-img">
+
         <form id="plan-form">
             <label for="age">Age:</label>
             <input type="number" id="age" required>
@@ -97,16 +172,17 @@
         </form>
     </div>
 
-    <!-- Result Output Container -->
+    <!-- Result Container -->
     <div class="container" id="result-container">
         <h2>Your Diet and Precautions Plan</h2>
         <div id="result"></div>
-        <button class="btn-link" id="medicine-btn">Medicine Recommendation Again</button>
+        <button class="btn-link" id="medicine-btn">Get Medicine Recommendation</button>
     </div>
 
     <script>
-        document.getElementById('plan-form').addEventListener('submit', function(event) {
+        document.getElementById('plan-form').addEventListener('submit', function (event) {
             event.preventDefault();
+
             const age = document.getElementById('age').value;
             const gender = document.getElementById('gender').value;
             const symptoms = document.getElementById('symptoms').value;
@@ -124,16 +200,10 @@
             .then(response => response.json())
             .then(data => {
                 if (data.result) {
-                    // Hide the form container
                     document.getElementById('form-container').style.display = 'none';
-
-                    // Display the result container
                     document.getElementById('result-container').style.display = 'block';
-                    
-                    // Populate the result content
                     document.getElementById('result').innerHTML = data.result;
 
-                    // Check if medical stores were found and display them
                     if (data.medical_stores && data.medical_stores.length > 0) {
                         let storesHtml = '<h3>Nearby Medical Stores:</h3><ul>';
                         data.medical_stores.forEach(store => {
@@ -150,9 +220,10 @@
             });
         });
 
-        document.getElementById('medicine-btn').addEventListener('click', function() {
-            window.location.href = '/medicine_finder'; // Redirecting to the new route
+        document.getElementById('medicine-btn').addEventListener('click', function () {
+            window.location.href = '/medicine_finder';
         });
     </script>
 </body>
+
 </html>
