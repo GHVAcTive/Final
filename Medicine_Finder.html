@@ -7,10 +7,18 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #eef2f7;
+            background-image: 
+                url('https://plus.unsplash.com/premium_photo-1671721439617-491242a0507f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8bWVkaWNpbmV8ZW58MHx8MHx8fDA%3D'),
+                url('https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fG1lZGljaW5lfGVufDB8fDB8fHww');
+            background-size: cover, contain; /* Cover for the first, contain for second */
+            background-position: center, bottom; /* Positioning the second image */
+            background-repeat: no-repeat, no-repeat;
+            height: 100vh;
             margin: 0;
             padding: 0;
+            background-color: #eef2f7;
         }
+
         .container {
             max-width: 900px;
             margin: 50px auto;
@@ -19,18 +27,24 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
         }
+
         h2 {
             text-align: center;
-            font-size: 24px;
-            color: #333;
+            font-size: 36px;
+            color: #0b0c0d;
             margin-bottom: 20px;
             text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
+
         form {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
         }
+
         label {
             width: 48%;
             margin: 10px 0;
@@ -38,9 +52,7 @@
             display: flex;
             align-items: center;
         }
-        label input {
-            margin-right: 10px;
-        }
+
         button {
             width: 100%;
             padding: 15px;
@@ -52,17 +64,11 @@
             cursor: pointer;
             margin-top: 20px;
         }
+
         button:hover {
             background-color: #218838;
         }
-        background {
-            background-image: url('images/background.jpg'); /* Path to your image */
-            background-size: cover; /* Makes the image cover the entire background */
-            background-position: center; /* Centers the background image */
-            background-repeat: no-repeat; /* Ensures the background doesn't repeat */
-            height: 100vh; /* Ensures the background covers the full viewport height */
-            margin: 0;
-        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -75,10 +81,9 @@
 </head>
 <body>
     <div class="container">
-        <background> </background>
         <h2>Select Symptoms</h2>
         <form action="/predict" method="post">
-            <label><input type="checkbox" name="symptoms" value="itching"> Itching</label>
+             <label><input type="checkbox" name="symptoms" value="itching"> Itching</label>
 <label><input type="checkbox" name="symptoms" value="skin_rash"> Skin Rash</label>
 <label><input type="checkbox" name="symptoms" value="nodal_skin_eruptions"> Nodal Skin Eruptions</label>
 <label><input type="checkbox" name="symptoms" value="continuous_sneezing"> Continuous Sneezing</label>
@@ -204,7 +209,6 @@
 <label><input type="checkbox" name="symptoms" value="silver_like_dusting"> Silver-like dusting</label>
 <label><input type="checkbox" name="symptoms" value="small_dents_in_nails"> Small dents in nails</label>
 <label><input type="checkbox" name="symptoms" value="inflammatory_nails"> Inflammatory nails</label>
-            <!-- Add more symptoms here if needed -->
             <button type="submit">Find Medicine</button>
         </form>
     </div>
