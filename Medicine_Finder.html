@@ -8,11 +8,10 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-image: 
-                url('https://plus.unsplash.com/premium_photo-1671721439617-491242a0507f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8bWVkaWNpbmV8ZW58MHx8MHx8fDA%3D'),
-                url('https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fG1lZGljaW5lfGVufDB8fDB8fHww');
-            background-size: cover, contain; /* Cover for the first, contain for second */
-            background-position: center, bottom; /* Positioning the second image */
-            background-repeat: no-repeat, no-repeat;
+                url('https://images.pexels.com/photos/3683041/pexels-photo-3683041.jpeg?auto=compress&cs=tinysrgb&w=600');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             height: 100vh;
             margin: 0;
             padding: 0;
@@ -22,21 +21,32 @@
         .container {
             max-width: 900px;
             margin: 50px auto;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.8); /* 80% opacity */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            opacity: 0; /* Start as invisible */
+            transform: translateY(20px); /* Start from below */
+            animation: fadeInUp 0.8s forwards; /* Animation */
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1; /* Fade to visible */
+                transform: translateY(0); /* Move to original position */
+            }
         }
 
         h2 {
             text-align: center;
             font-size: 36px;
-            color: #0b0c0d;
+            color: #2c3e50;
             margin-bottom: 20px;
             text-transform: uppercase;
             letter-spacing: 2px;
             font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
         }
 
         form {
@@ -51,27 +61,34 @@
             font-size: 16px;
             display: flex;
             align-items: center;
+            transition: color 0.3s;
+        }
+
+        label:hover {
+            color: #27ae60;
         }
 
         button {
             width: 100%;
             padding: 15px;
-            background-color: #28a745;
+            background-color: #27ae60;
             color: white;
             border: none;
             border-radius: 5px;
             font-size: 18px;
             cursor: pointer;
             margin-top: 20px;
+            transition: background-color 0.3s, transform 0.2s;
         }
 
         button:hover {
-            background-color: #218838;
+            background-color: #219653;
+            transform: scale(1.05);
         }
 
         @media (max-width: 768px) {
             .container {
-                padding: 15px;
+                padding: 20px;
             }
             label {
                 width: 100%;
@@ -83,7 +100,7 @@
     <div class="container">
         <h2>Select Symptoms</h2>
         <form action="/predict" method="post">
-             <label><input type="checkbox" name="symptoms" value="itching"> Itching</label>
+            <label><input type="checkbox" name="symptoms" value="itching"> Itching</label>
 <label><input type="checkbox" name="symptoms" value="skin_rash"> Skin Rash</label>
 <label><input type="checkbox" name="symptoms" value="nodal_skin_eruptions"> Nodal Skin Eruptions</label>
 <label><input type="checkbox" name="symptoms" value="continuous_sneezing"> Continuous Sneezing</label>
