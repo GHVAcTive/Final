@@ -11,7 +11,9 @@
             font-family: 'Helvetica Neue', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f6f9;
+            background-image: url('https://images.pexels.com/photos/7615574/pexels-photo-7615574.jpeg?auto=compress&cs=tinysrgb&w=600'); /* Background image */
+            background-size: cover; /* Cover the entire viewport */
+            background-position: center; /* Center the image */
             color: #333;
         }
 
@@ -19,7 +21,7 @@
         .container {
             max-width: 700px;
             margin: 60px auto;
-            background-color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent background */
             padding: 40px;
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
@@ -97,13 +99,6 @@
             display: none;
         }
 
-        /* Image styling */
-        .banner-img {
-            width: 100%;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
         /* Additional visuals */
         .container:before {
             content: '';
@@ -139,9 +134,6 @@
     <!-- Main Container -->
     <div class="container" id="form-container">
         <h1>Diet and Precautions Plan Generator</h1>
-
-        <!-- Add a Banner Image -->
-        <img src="https://via.placeholder.com/700x300" alt="Health Banner" class="banner-img">
 
         <form id="plan-form">
             <label for="age">Age:</label>
