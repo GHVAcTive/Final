@@ -1,33 +1,50 @@
 import streamlit as st
 import os
-from src.preprocess import extract_frames, detect_faces_in_frames
 from deepface import DeepFace
+from src.preprocess import extract_frames, detect_faces_in_frames
 
+# Setup
+st.set_page_config(page_title="Deepfake Detector", layout="centered")
 st.title("🔍 Deepfake Detection App")
 
 option = st.radio("Select file type:", ("Image", "Video"))
 
+# Make sure upload folders exist
+os.makedirs("uploaded_files", exist_ok=True)
+os.makedirs("uploaded_files/frames", exist_ok=True)
+os.makedirs("uploaded_files/faces", exist_ok=True)
+
 if option == "Image":
     uploaded_image = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
     if uploaded_image:
-        with open("uploaded_image.jpg", "wb") as f:
+        image_path = os.path.join("uploaded_files", "uploaded_image.jpg")
+        with open(image_path, "wb") as f:
             f.write(uploaded_image.getbuffer())
-
-        st.image("uploaded_image.jpg", caption="Uploaded Image", use_container_width=True)
+        
+        st.image(image_path, caption="Uploaded Image", use_container_width=True)
         st.success("✅ Image uploaded successfully!")
 
-        # Deepfake detection logic
         try:
-            analysis = DeepFace.analyze(img_path="uploaded_image.jpg", actions=['emotion', 'age', 'gender'])
+            st.write("🧠 Analyzing the image...")
+            analysis = DeepFace.analyze(img_path=image_path, actions=['emotion', 'age', 'gender'], enforce_detection=False)
             st.write("### 🤖 DeepFace Analysis:")
             st.json(analysis)
         except Exception as e:
-            st.error(f"Detection failed: {e}")
+            st.error(f"❌ Detection failed: {e}")
 
 elif option == "Video":
     uploaded_video = st.file_uploader("Upload a video", type=["mp4", "avi", "mov"])
     if uploaded_video:
-        with open("uploaded_video.mp4", "wb") as f:
+        video_path = os.path.join("uploaded_files", "uploaded_video.mp4")
+        with open(video_path, "wb") as f:
             f.write(uploaded_video.getbuffer())
-        st.video("uploaded_video.mp4")
+        
+        st.video(video_path)
         st.success("✅ Video uploaded successfully!")
+
+        # Frame extraction
+        st.write("📤 Extracting frames from video...")
+        extract_frames(video_path, "uploaded_files/frames", max_frames=10)
+        detect_faces_in_frames("uploaded_files/frames", "uploaded_files/faces")
+        
+        st.write("✅ Frames and faces saved.")
