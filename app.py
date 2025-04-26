@@ -7,11 +7,17 @@ from PIL import Image
 from collections import Counter
 from deepface import DeepFace
 import tempfile
+import itertools
+import numpy as np
+import pandas as pd
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 st.set_page_config(page_title="Deepfake Detection with DeepFace", layout="centered")
 st.title("🧠 Deepfake Detection using DeepFace")
 
-option = st.radio("Select file type:", ("Image", "Video"))
+option = st.radio("Select file type:", ("Image", "Video", "Evaluate"))
 
 os.makedirs("uploaded_files", exist_ok=True)
 os.makedirs("uploaded_files/frames", exist_ok=True)
@@ -52,7 +58,6 @@ elif option == "Video":
 
         st.write("📤 Extracting frames...")
 
-        # Extract every N-th frame
         cap = cv2.VideoCapture(video_path)
         frame_dir = "uploaded_files/frames"
         count = 0
@@ -63,7 +68,7 @@ elif option == "Video":
             success, frame = cap.read()
             if not success:
                 break
-            if count % 20 == 0:  # change frame interval if needed
+            if count % 20 == 0:
                 frame_path = os.path.join(frame_dir, f"frame_{saved}.jpg")
                 cv2.imwrite(frame_path, frame)
                 saved += 1
@@ -97,3 +102,53 @@ elif option == "Video":
             st.success(f"🎯 **Most Frequent Emotion in Video:** {final_emotion}")
         else:
             st.warning("⚠️ No faces/emotions detected in video.")
+
+# =====================================
+# EVALUATE MODEL ON MULTIPLE IMAGES
+# =====================================
+elif option == "Evaluate":
+    uploaded_images = st.file_uploader("Upload multiple face images", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
+
+    if uploaded_images and len(uploaded_images) >= 3:
+        temp_dir = tempfile.mkdtemp()
+        image_paths = []
+
+        for img in uploaded_images:
+            img_path = os.path.join(temp_dir, img.name)
+            with open(img_path, "wb") as f:
+                f.write(img.getbuffer())
+            image_paths.append(img_path)
+
+        st.write(f"📸 {len(image_paths)} images uploaded.")
+
+        pairs = list(itertools.combinations(image_paths, 2))
+        y_true, y_pred = [], []
+
+        for img1, img2 in pairs:
+            try:
+                result = DeepFace.verify(img1_path=img1, img2_path=img2, enforce_detection=False)
+                y_true.append(1 if result["verified"] else 0)
+                y_pred.append(1 if result["distance"] < result["threshold"] else 0)
+            except Exception as e:
+                st.warning(f"⚠️ Error comparing images: {e}")
+
+        if y_true:
+            acc = accuracy_score(y_true, y_pred)
+            prec = precision_score(y_true, y_pred, zero_division=0)
+            rec = recall_score(y_true, y_pred, zero_division=0)
+            f1 = f1_score(y_true, y_pred, zero_division=0)
+            cm = confusion_matrix(y_true, y_pred)
+
+            st.write("\n### 📊 Model Evaluation Results")
+            st.write(f"- Accuracy: `{acc:.2f}`")
+            st.write(f"- Precision: `{prec:.2f}`")
+            st.write(f"- Recall: `{rec:.2f}`")
+            st.write(f"- F1 Score: `{f1:.2f}`")
+
+            fig, ax = plt.subplots()
+            sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=['Fake', 'Real'], yticklabels=['Fake', 'Real'])
+            plt.xlabel("Predicted")
+            plt.ylabel("True")
+            st.pyplot(fig)
+        else:
+            st.warning("❗ Not enough data to evaluate.")

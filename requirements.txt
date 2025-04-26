@@ -5,3 +5,6 @@ deepface
 tensorflow
 Pillow
 tf-keras
+scikit-learn
+matplotlib
+seaborn
