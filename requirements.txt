@@ -3,8 +3,13 @@ opencv-python
 numpy
 deepface
 tensorflow
-Pillow
 tf-keras
 scikit-learn
 matplotlib
 seaborn
+streamlit==1.33.0
+opencv-python
+pillow
+tensorflow==2.13.0
+keras==2.13.1
+deepface==0.0.79
