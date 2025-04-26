@@ -3,5 +3,5 @@ opencv-python
 numpy
 deepface
 tensorflow
-pillow
+Pillow
 tf-keras
